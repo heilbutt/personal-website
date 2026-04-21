@@ -1,7 +1,5 @@
 ---
-// Everything between triple-dash code fences runs in the shell
-// console.log('This runs in your terminal, not the browser!');
-const page_title = "Hermann Pommerenke";
+const page_title = "About me | Hermann Pommerenke";
 ---
 
 <html lang="en">
@@ -11,6 +9,12 @@ const page_title = "Hermann Pommerenke";
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
         <title>{page_title}</title>
+        <style>
+            h1 {
+                color: purple;
+                font-size: 4rem;
+            }
+        </style>
     </head>
     <body>
         <a href="/">Home</a>
@@ -18,8 +22,8 @@ const page_title = "Hermann Pommerenke";
         <a href="/about">About</a>
 
         <h1>{page_title}</h1>
-
-        <p>Hello world!</p>
+        <h2>... and this site under construction</h2>
+        <p>I am working through Astro's introductory tutorial. This is the second page on my website</p>
     </body>
 </html>
 <style>
