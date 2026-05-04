@@ -1,0 +1,97 @@
+[
+	{
+		"id": "steinmetz2025",
+		"type": "article-journal",
+		"citation-key": "steinmetz2025",
+		"container-title": "Experiments in Fluids",
+		"DOI": "10.1007/s00348-025-03988-0",
+		"ISSN": "1432-1114",
+		"issue": "62",
+		"publisher": "Springer Science and Business Media LLC",
+		"title": "Multidimensional position and displacement estimation using periodic coded optical apertures in a single-camera imaging system",
+		"volume": "66",
+		"author": [
+			{
+				"family": "Steinmetz",
+				"given": "Tino"
+			},
+			{
+				"family": "Otto",
+				"given": "Jonas"
+			},
+			{
+				"family": "Pommerenke",
+				"given": "Hermann"
+			},
+			{
+				"family": "Otto",
+				"given": "Johannes"
+			},
+			{
+				"family": "Kleinwächter",
+				"given": "André"
+			},
+			{
+				"family": "Ebert",
+				"given": "Eric"
+			},
+			{
+				"family": "Damaschke",
+				"given": "Nils"
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					"2025",
+					2,
+					24
+				]
+			]
+		}
+	},
+	{
+		"id": "steinmetz2024",
+		"type": "paper-conference",
+		"citation-key": "steinmetz2024",
+		"container-title": "Proceedings of the 21st International Symposium on the Application of Laser and Imaging Techniques to Fluid Mechanics, Lisbon, Portugal",
+		"DOI": "10.55037/lxlaser.21st.112",
+		"page": "1–23",
+		"publisher": "International Symposium on the Application of Laser and Imaging Techniques to Fluid Mechanics",
+		"title": "Multidimensional position and displacement estimation using periodic coded optical apertures in a single camera imaging system",
+		"volume": "21",
+		"author": [
+			{
+				"family": "Steinmetz",
+				"given": "Tino"
+			},
+			{
+				"family": "Otto",
+				"given": "Jonas"
+			},
+			{
+				"family": "Pommerenke",
+				"given": "Hermann Winrich"
+			},
+			{
+				"family": "Ebert",
+				"given": "Eric"
+			},
+			{
+				"family": "Kleinwächter",
+				"given": "André"
+			},
+			{
+				"family": "Damaschke",
+				"given": "Nils"
+			}
+		],
+		"issued": {
+			"date-parts": [
+				[
+					"2024"
+				]
+			]
+		}
+	}
+]

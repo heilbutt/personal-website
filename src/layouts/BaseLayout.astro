@@ -3,10 +3,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css'
 
-const {title} = Astro.props;
-var page_title = 'Hermann Pommerenke';
+const { title } = Astro.props;
+var pageTitle = 'Hermann Pommerenke';
 if (title) {
-    page_title = title + ' | ' + page_title;
+    pageTitle = title + ' | ' + pageTitle;
 }
 ---
 <html lang="en">
@@ -15,7 +15,7 @@ if (title) {
         <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        <title>{page_title}</title>
+        <title>{pageTitle}</title>
     </head>
     <body>
         <Header/>
