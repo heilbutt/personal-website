@@ -2,6 +2,7 @@
 layout: '../layouts/MarkdownLayout.astro'
 title: 'About'
 ---
+
 # About
 
 ## ... and this site under construction
