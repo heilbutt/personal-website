@@ -2,17 +2,18 @@ import { defineCollection } from 'astro:content';
 import { file } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Content collection:
-// List of publications
+// Content collection: List of publications
+// Parses a JSON created by Zotero's BetterBibTeX Better CSL JSON exporter
 
-// Scheme for one author
-const PublicationPersonSchema = z.object({
+// Schema for one author
+export const publicationPersonSchema = z.object({
     'family': z.string(),
-    'given': z.string()
-})
+    'given': z.string(),
+    'non-dropping-particle': z.string().optional()
+});
 
-// Scheme for date (month and day optional)
-const PublicationDateSchema = z.object({
+// Schema for date (month and day optional)
+const publicationDateSchema = z.object({
     'date-parts': z.array(
         z.array(z.coerce.number().int())
     )
@@ -31,27 +32,67 @@ const PublicationDateSchema = z.object({
     return new Date(year, jsMonth, jsDay);
 });
 
-// Scheme for publication entry
-const PublicationSchema = z.object({
-    'id': z.string(), // citation key
-    'type': z.string(), // e.g. paper-conference, article-journal, ...
+// Base schema for a generic publication
+const basePublicationSchema = z.object({
     'title': z.string(),
-    'author': z.array(PublicationPersonSchema),
-    'issued': PublicationDateSchema, // publication date
-    'container-title': z.string(), // Journal or proceedings title
-    'publisher': z.string().optional(),
-    'issue': z.string().optional(),
-    'volume': z.string().optional(),
-    'page': z.string().optional(),
+    'author': z.array(publicationPersonSchema),
+    'issued': publicationDateSchema,
     'DOI': z.string().optional(),
     'URL': z.url().optional()
 });
 
+// Schema for articles in peer-reviewed journals
+const articleSchema = basePublicationSchema.extend({
+    'type': z.literal('article-journal'),
+    'container-title': z.string(), // Journal
+    'publisher': z.string().optional(),
+    'issue': z.string().optional(),
+    'volume': z.string().optional(),
+    'page': z.string().optional(),
+});
+
+// Schema for articles in conference proceedings
+const conferencePaperSchema = basePublicationSchema.extend({
+    'type': z.literal('paper-conference'),
+    'title': z.string(),
+    'author': z.array(publicationPersonSchema),
+    'issued': publicationDateSchema,
+    'container-title': z.string(), // Proceedings title
+    'event-place': z.string(), // Conference venue, Zotero GUI: `Event Place`
+    'publisher': z.string().optional(),
+    'page': z.string().optional(),
+});
+
+// Schema for presentations, can be talks, invited talks, posters
+const presentationSchema = basePublicationSchema.extend({
+    'type': z.literal('speech'), // Zotero GUI: `Item Type`
+    'genre': z.enum(['Talk', 'Invited Talk', 'Poster']), // Zotero GUI: `Type`
+    'event-title': z.string(), // Zotero GUI: `Meeting Name`
+    'event-place': z.string(), // Zotero GUI: `Place`
+});
+
+// Schema for reports
+const reportSchema = basePublicationSchema.extend({
+    'type': z.literal('report'),
+    'publisher': z.string(), // Zotero GUI: `Institution`
+    'publisher-place': z.string(), // Zotero GUI: `Place`
+    'number': z.string() // Zotero GUI: `Report Number`
+});
+
+// Union schema for publication entry
+const publicationSchema = z.discriminatedUnion('type', [
+    articleSchema,
+    conferencePaperSchema,
+    presentationSchema,
+    reportSchema
+]);
+
+// Define collection and load from JSON
 const publications = defineCollection({
     loader: file('./src/content/publications/publications.json'),
-    schema: PublicationSchema
-})
+    schema: publicationSchema
+});
 
-// Make content collections available
+// Make all content collections available
 
 export const collections = { publications };
