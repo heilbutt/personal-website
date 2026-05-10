@@ -3,14 +3,18 @@ interface Props {
     title: string;
     authors: string;
     meta: string;
-    links: string;
+    link: {
+        text: string,
+        href: string
+    } | null;
 }
-const { title, authors, meta, links } = Astro.props;
+
+const { title, authors, meta, link } = Astro.props;
 ---
 
 <div class="publication-container">
     <h3 class="publication-title">{title}</h3>
     <p class="publication-authors">{authors}</p>
     <p class="publication-meta">{meta}</p>
-    <p class="publication-links">{links}</p>
+    {link && <p class="publication-links"><a href={link.href}>{link.text}</a></p>}
 </div>

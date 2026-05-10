@@ -1,109 +1,51 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PublicationBox from '../components/PublicationBox.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PublicationBox from "../components/PublicationBox.astro";
 
-import { getCollection } from 'astro:content';
-const allPublications = await getCollection('publications');
-
-import type { z } from "astro/zod";
-import { publicationPersonSchema } from '../content.config';
-type PublicationPerson = z.infer<typeof publicationPersonSchema>;
-
-// Helper to filter publications by type and genre
-const filterPublications = (type: string, genre?:string) => {
-    return allPublications.filter((pub) => {
-        const matchesType = pub.data.type === type;
-        const matchesGenre = genre ? pub.data.genre === genre : true;
-        return matchesType && matchesGenre;
-    });
-};
-
-// Helper functions to format given name of the author 
-// to the initials no matter the input
-function formatGivenName(givenName: string): string {
-    return givenName
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean)
-        .map((part) => { part[0] + '.' })
-        .join(" ");
-};
-
-// Helper function to format one author name
-function formatOneAuthor(author: PublicationPerson): string {
-    const lastName = author['non-dropping-particle']
-        ? author['non-dropping-particle'] + ' ' + author['family']
-        : author['family'];
-    return formatGivenName(author['given']) + ' ' + lastName;
-};
-
-// Helper function to format list of authors
-function formatAuthors(
-    authors: PublicationPerson[],
-    maxAuthors = 3,
-): string {
-    const shownAuthors = authors.slice(0, maxAuthors).map(formatOneAuthor);
-    return authors.length > maxAuthors
-        ? shownAuthors + 'et al.'
-        : shownAuthors.join(", ");
-};
-
-const journalArticles = 
+import {
+    theses,
+    journalArticles,
+    conferencePapers,
+    reports,
+    talks,
+    invitedTalks,
+    posters,
+} from "../lib/publications";
 ---
 
 <BaseLayout title="Publications">
-
-    <h2>Articles in peer-reviewed journals</h2>
-
+    <h2>Theses</h2>
     <div class="publications-list-container">
-        {
-            filterPublications('article-journal').map((pub) => {
-                if (pub.data.type !== 'article-journal') return null;
-                return (
-                    <PublicationBox
-                        title="}"
-                        authors=""
-                        meta=""
-                        links=""
-                    />
-                );
-            })
-        }
+        {theses.map((pub) => <PublicationBox {...pub} />)}
     </div>
 
-    <ul>
-        {
-            allPublications.map((pub) => (
-                <li>
-                    <>
-                        <strong>{pub.data["title"]}</strong>
-                        <br />
-                    </>
-                    <em>{pub.data["container-title"]}</em>(
-                    {pub.data.issued.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                    })}
-                    )
-                    <br />
-                    <span>
-                        {pub.data.author.map((auth, index) => (
-                            <span>
-                                {auth.given} {auth.family}
-                                {index < pub.data.author.length - 1 ? ", " : ""}
-                            </span>
-                        ))}
-                    </span>
-                </li>
-            ))
-        }
-    </ul></BaseLayout
->
-<p class="publication-authors">{formatAuthors(pub.data.author)}</p>
-    <p class="publication-meta">{
-        pub.data['container-title'] + ', '
-        +
-        + pub.data.issued.getFullYear().toString()
+    <h2>Articles in peer-reviewed journals</h2>
+    <div class="publications-list-container">
+        {journalArticles.map((pub) => <PublicationBox {...pub} />)}
+    </div>
 
-    }</p>
+    <h2>Articles in conference proceedings</h2>
+    <div class="publications-list-container">
+        {conferencePapers.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Technical reports</h2>
+    <div class="publications-list-container">
+        {reports.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Invited talks</h2>
+    <div class="publications-list-container">
+        {invitedTalks.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Talks</h2>
+    <div class="publications-list-container">
+        {talks.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Posters</h2>
+    <div class="publications-list-container">
+        {posters.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+</BaseLayout>
