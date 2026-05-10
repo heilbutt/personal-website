@@ -100,7 +100,7 @@ const publicationSchema = z.discriminatedUnion( 'type', [
 // Define collections and export
 export const collections = {
     publications: defineCollection( {
-        loader: file( './src/content/publications/publications.json' ),
+        loader: file( './src/content/publications.json' ),
         schema: publicationSchema
     } )
 };
