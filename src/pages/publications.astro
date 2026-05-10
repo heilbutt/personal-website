@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PublicationBox from '../components/PublicationBox.astro';
 
 import { getCollection } from 'astro:content';
 const allPublications = await getCollection('publications');
@@ -17,7 +18,8 @@ const filterPublications = (type: string, genre?:string) => {
     });
 };
 
-// Helper functions to format list of authors
+// Helper functions to format given name of the author 
+// to the initials no matter the input
 function formatGivenName(givenName: string): string {
     return givenName
         .trim()
@@ -27,6 +29,7 @@ function formatGivenName(givenName: string): string {
         .join(" ");
 };
 
+// Helper function to format one author name
 function formatOneAuthor(author: PublicationPerson): string {
     const lastName = author['non-dropping-particle']
         ? author['non-dropping-particle'] + ' ' + author['family']
@@ -34,6 +37,7 @@ function formatOneAuthor(author: PublicationPerson): string {
     return formatGivenName(author['given']) + ' ' + lastName;
 };
 
+// Helper function to format list of authors
 function formatAuthors(
     authors: PublicationPerson[],
     maxAuthors = 3,
@@ -43,6 +47,8 @@ function formatAuthors(
         ? shownAuthors + 'et al.'
         : shownAuthors.join(", ");
 };
+
+const journalArticles = 
 ---
 
 <BaseLayout title="Publications">
@@ -53,18 +59,13 @@ function formatAuthors(
         {
             filterPublications('article-journal').map((pub) => {
                 if (pub.data.type !== 'article-journal') return null;
-
                 return (
-                    <div class="publication-container">
-                        <h3 class="publication-title">{pub.data['title']}</h3>
-                        <p class="publication-authors">{formatAuthors(pub.data.author)}</p>
-                        <p class="publication-meta">{
-                            pub.data['container-title'] + ', '
-                            +
-                            + pub.data.issued.getFullYear().toString()
-
-                        }</p>
-                    </div>
+                    <PublicationBox
+                        title="}"
+                        authors=""
+                        meta=""
+                        links=""
+                    />
                 );
             })
         }
@@ -99,3 +100,10 @@ function formatAuthors(
         }
     </ul></BaseLayout
 >
+<p class="publication-authors">{formatAuthors(pub.data.author)}</p>
+    <p class="publication-meta">{
+        pub.data['container-title'] + ', '
+        +
+        + pub.data.issued.getFullYear().toString()
+
+    }</p>
