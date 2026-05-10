@@ -3,8 +3,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
+interface Props {
+    title?: string;
+}
 const { title } = Astro.props;
-var pageTitle = "Hermann Pommerenke";
+
+var pageTitle = 'Hermann Pommerenke';
 if (title) {
     pageTitle = title + " | " + pageTitle;
 }

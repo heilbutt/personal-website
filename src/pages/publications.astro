@@ -1,24 +1,51 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-const publications = await getCollection('publications');
+import PublicationBox from '../components/PublicationBox.astro';
+
+import {
+    theses,
+    journalArticles,
+    conferencePapers,
+    reports,
+    talks,
+    invitedTalks,
+    posters,
+} from '../lib/publications';
 ---
+
 <BaseLayout title="Publications">
-    <ul>
-        {publications.map((pub) => (
-            <li>
-                <strong>{pub.data['title']}</strong><br />
-                <em>{pub.data['container-title']}</em> 
-                ({pub.data.issued.toLocaleDateString('en-US', { 
-                    year: 'numeric', month: 'long', day: 'numeric' 
-                })})
-                <br />
-                <span>
-                {pub.data.author.map((auth, index) => (
-                    <span>{auth.given} {auth.family}{index < pub.data.author.length - 1 ? ', ' : ''}</span>
-                ))}
-                </span>
-            </li>
-        ))}
-</ul>
+    <h2>Theses</h2>
+    <div class="publications-list-container">
+        {theses.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Articles in peer-reviewed journals</h2>
+    <div class="publications-list-container">
+        {journalArticles.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Articles in conference proceedings</h2>
+    <div class="publications-list-container">
+        {conferencePapers.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Technical reports</h2>
+    <div class="publications-list-container">
+        {reports.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Invited talks</h2>
+    <div class="publications-list-container">
+        {invitedTalks.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Talks</h2>
+    <div class="publications-list-container">
+        {talks.map((pub) => <PublicationBox {...pub} />)}
+    </div>
+
+    <h2>Posters</h2>
+    <div class="publications-list-container">
+        {posters.map((pub) => <PublicationBox {...pub} />)}
+    </div>
 </BaseLayout>

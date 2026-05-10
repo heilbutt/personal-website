@@ -1,0 +1,21 @@
+---
+interface Props {
+    title: string;
+    authors: string;
+    meta: string;
+    link: {
+        prefix: string,
+        text: string,
+        href: string
+    } | null;
+}
+
+const { title, authors, meta, link } = Astro.props;
+---
+
+<div class="publication-container">
+    <h3 class="title">{title}</h3>
+    <p class="authors">{authors}</p>
+    <p class="meta">{meta}</p>
+    {link && <p class="link">{link.prefix}<a href={link.href}>{link.text}</a></p>}
+</div>
