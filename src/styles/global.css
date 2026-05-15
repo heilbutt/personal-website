@@ -1,56 +1,102 @@
+:root {
+    /* Catppuccin Mocha colors: https://catppuccin.com/palette/ */
+    --rosewater: rgb(245, 224, 220);
+    --flamingo: rgb(242, 205, 205);
+    --pink: rgb(245, 194, 231);
+    --mauve: rgb(203, 166, 247);
+    --red: rgb(243, 140, 169);
+    --maroon: rgb(235, 160, 172);
+    --peach: rgb(250, 179, 135);
+    --yellow: rgb(249, 226, 175);
+    --green: rgb(166, 227, 161);
+    --teal: rgb(148, 226, 213);
+    --sky: rgb(137, 220, 235);
+    --sapphire: rgb(116, 199, 236);
+    --blue: rgb(137, 180, 250);
+    --lavender: rgb(180, 190, 254);
+    --text: rgb(205, 214, 244);
+    --subtext1: rgb(186, 194, 222);
+    --subtext0: rgb(166, 173, 201);
+    --overlay2: rgb(148, 154, 179);
+    --overlay1: rgb(128, 133, 157);
+    --overlay0: rgb(108, 112, 134);
+    --surface2: rgb(88, 91, 112);
+    --surface1: rgb(69, 71, 90);
+    --surface0: rgb(49, 50, 68);
+    --base: rgb(30, 30, 46);
+    --mantle: rgb(24, 24, 37);
+    --crust: rgb(17, 17, 27);
+
+    --font-sans: sans-serif;
+    --font-mono: monospace;
+}
+
 html {
-  background-color: #f1f5f9;
-  font-family: sans-serif;
+    background-color: var(--base); /* fallback */
 }
 
 body {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 80ch;
-  padding: 1rem;
-  line-height: 1.5;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 80ch;
+    padding: 1rem;
+    font-family: var(--font-sans);
+    background-color: var(--base);
+    color: var(--text);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 h1 {
-  margin: 1rem 0;
-  font-size: 2.5rem;
-  color: darkslateblue
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 2.5rem;
+    color: var(--text);
+}
+
+h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 1.5rem;
+    color: var(--text);
 }
 
 .nav-menu {
-  width: 100%;
-  display: inline-block;
+    width: 100%;
+    display: inline-block;
 }
 
 .nav-menu a {
-  display: inline-block;
-  padding: 10px;
-  text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #0d0950;
+    display: inline-block;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #0d0950;
 }
 
 .nav-menu a:hover,
 .nav-menu a:focus {
-  background-color: #ff9776;
+    background-color: #ff9776;
 }
 
 @media (max-width: 768px) {
-  .nav-menu {
-    display: block;
-    position: static;
-    width: auto;
-    background: none;
-  }
+    .nav-menu {
+        display: block;
+        position: static;
+        width: auto;
+        background: none;
+    }
 
-  .nav-menu a {
-    display: block;
-    text-align: center;
-  }
+    .nav-menu a {
+        display: block;
+        text-align: center;
+    }
 }
