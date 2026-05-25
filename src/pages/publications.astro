@@ -1,38 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PublicationContainer from '../components/PublicationContainer.astro';
-import '../styles/publications.css';
+import PublicationCategory from '../components/PublicationCategory.astro';
 
 import { publicationCategories } from '../lib/publications';
+
+const metadata = {
+    title: 'Publications'
+}
 ---
 
-<BaseLayout title="Publications">
-    <h1>Publications</h1>
+<BaseLayout {...metadata}>
+    <header>
+        <h1>{metadata.title}</h1>
+        <p>List of publications of Hermann Pommerenke. Last updated on 16 May 2026.</p>
+    </header>
 
-    <p>List of publications of Hermann Pommerenke. Last updated on 16 May 2026.</p>
+    <article>
+        <p>You can also find me on these platforms:</p>
+        <ul>
+            <li>LinkedIn: <span class="mono"><a href="https://www.linkedin.com/in/hermann-pommerenke">/hermann-pommerenke</a></span></li>
+            <li>ResearchGate: <span class="mono"><a href="https://www.researchgate.net/profile/hermann-pommerenke-2">/hermann-pommerenke-2</a></span></li>
+            <li>ORCID: <span class="mono"><a href="http://orcid.org/0000-0001-8137-3797">0000-0001-8137-3797</a></span></li>
+        </ul>
+    </article>
 
-    <button onclick="window.print();">Printable version / save as PDF</button>
-
-    <p>You can also find me on these platforms:</p>
-    <ul>
-        <li>LinkedIn: <span class="mono"><a href="https://www.linkedin.com/in/hermann-pommerenke">/hermann-pommerenke</a></span></li>
-        <li>ResearchGate: <span class="mono"><a href="https://www.researchgate.net/profile/hermann-pommerenke-2">/hermann-pommerenke-2</a></span></li>
-        <li>ORCID: <span class="mono"><a href="http://orcid.org/0000-0001-8137-3797">0000-0001-8137-3797</a></span></li>
-    </ul>
-
-    <div class="hide-for-print">
+    <nav>
         <p>Jump directly to categories:</p>
         <ul>
             {publicationCategories.map((category) => (
                 <li><a href={`#${category.slug}`}>{category.heading}</a></li>
             ))}
         </ul>
-    </div>
+    </nav>
 
     {publicationCategories.map((category) => (
-        <section>
-            <h2 id={category.slug}>{category.heading}</h2>
-            {category.publications.map((pub) => <PublicationContainer {...pub} />)}
-        </section>
+        <PublicationCategory category={category} />
     ))}
 </BaseLayout>

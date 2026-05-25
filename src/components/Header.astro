@@ -7,3 +7,23 @@ import Navigation from './Navigation.astro';
         <Navigation />
     </div>
 </header>
+
+<style>
+    .site-header {
+        position: sticky;
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        top: 0;
+        z-index: 1000;
+        background-color: color-mix(in srgb, var(--base) 50%, transparent 50%);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 0 16px var(--crust);
+    }
+
+    /* inner container that is aligned with main content */
+    .site-header > div {
+        margin: 0 auto;
+        width: var(--max-width);
+    }
+</style>

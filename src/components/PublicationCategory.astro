@@ -1,0 +1,23 @@
+---
+import type { PublicationCategory } from '../lib/publications';
+import PublicationContainer from './PublicationContainer.astro'
+
+interface Props {
+    category: PublicationCategory
+}
+const { category } = Astro.props;
+---
+
+<section>
+    <h2 id={category.slug}>{category.heading}</h2>
+    <div>
+        {category.publications.map((pub) => <PublicationContainer publication={pub} />)}
+    </div>
+</section>
+
+<style>
+    section>div {
+        display: grid;
+        gap: 1rem;
+    }
+</style>

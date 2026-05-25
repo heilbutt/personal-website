@@ -3,3 +3,37 @@
     <a href="/publications/">Publications</a>
     <a href="/about/">About</a>
 </nav>
+
+<style>
+    .site-nav {
+        display: flex;
+    }
+
+    .site-nav>a {
+        border: none;
+        display: inline-block;
+        padding: 1.5rem 0.8rem;
+        text-transform: uppercase;
+        font-family: var(--font-mono);
+        font-size: 1.2rem;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+    }
+
+    .site-nav>a:is(:hover, :focus-visible) {
+        color: var(--color-link-hover);
+        text-decoration: underline;
+        text-shadow:
+            0 0 32px var(--color-link-hover),
+            0 0 64px var(--color-link-hover);
+    }
+
+    /* remove padding on first and last elements */
+    .site-nav>a:first-of-type {
+        padding-left: 0;
+    }
+
+    .site-nav>a:last-of-type {
+        padding-right: 0;
+    }
+</style>

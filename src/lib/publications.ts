@@ -49,9 +49,15 @@ function getPublicationLink(pub: PublicationFromZotero) {
         };
     }
     if (pub.data['URL']) {
+        const topLevelDomain = pub.data['URL']
+            .split('//')[1]
+            ?.split('/')[0]
+        if (!topLevelDomain) {
+            throw new Error('Could not process URL' + pub.data['URL']);
+        }
         return {
             prefix: 'URL: ',
-            text: pub.data['URL'],
+            text: topLevelDomain,
             href: pub.data['URL'],
         };
     }
@@ -71,7 +77,7 @@ function isNonNullable<T>(value: T): value is NonNullable<T> {
 // category has to be handled separately
 
 // Simplified homogenous types for outputting HTML
-type Publication = {
+export type Publication = {
     title: string,
     authors: string,
     meta: string, // any metadata, e.g. Journal, conference location, ...
@@ -82,7 +88,7 @@ type Publication = {
     } | null
 }
 
-type PublicationCategory = {
+export type PublicationCategory = {
     heading: string; // Headline to be printed
     slug: string // URL slug for anchor links
     publications: Publication[]; // list of pubs of this category
