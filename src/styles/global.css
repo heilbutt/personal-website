@@ -1,3 +1,7 @@
+/* ============================================================
+Global parameters
+============================================================ */
+
 :root {
     /* Catppuccin Mocha colors: https://catppuccin.com/palette/ */
     --rosewater: rgb(245, 224, 220);
@@ -27,76 +31,186 @@
     --mantle: rgb(24, 24, 37);
     --crust: rgb(17, 17, 27);
 
+    /* Colors for specific purposes, use for consistency */
+    --color-text: var(--text);
+    --color-accent: var(--mauve);
+    --color-link-normal: var(--blue);
+    --color-link-hover: var(--mauve);
+
+    /* type face */
     --font-sans: sans-serif;
-    --font-mono: monospace;
+    --font-mono: "Roboto Mono", "Fira Code", "SF Mono", "Segoe UI Mono", "Courier New", monospace;
+
+    /* Site geometry */
+    --max-width: 80ch;
 }
 
-html {
-    background-color: var(--base); /* fallback */
-}
-
-body {
-    margin: 0 auto;
-    width: 100%;
-    max-width: 80ch;
-    padding: 1rem;
-    font-family: var(--font-sans);
-    background-color: var(--base);
-    color: var(--text);
-}
+/* ============================================================
+Main layout, navigation menu
+============================================================ */
 
 * {
     box-sizing: border-box;
 }
 
+html {
+    /* fallback background color */
+    background-color: var(--base);
+    /* offset anchor links for sticky header */
+    scroll-padding-top: 4rem;
+}
+
+body {
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    max-width: var(--max-width);
+    font-family: var(--font-sans);
+    background-color: var(--base);
+    color: var(--color-text);
+}
+
+/* ============================================================
+Typography
+============================================================ */
+
+h1,
+h2 {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+}
+
 h1 {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-left: 0;
-    margin-right: 0;
-    font-size: 2.5rem;
-    color: var(--text);
+    font-size: 4rem;
+    letter-spacing: -0.02em;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 h2 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    margin-left: 0;
-    margin-right: 0;
-    font-size: 1.5rem;
-    color: var(--text);
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem; 
 }
 
-.nav-menu {
-    width: 100%;
-    display: inline-block;
+ul {
+    list-style-type: "\2014\a0";
 }
 
-.nav-menu a {
-    display: inline-block;
-    padding: 10px;
+ul.no-bullets {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/* reduce vertical space between lists and paragraphs */
+p+ul,
+ul+p,
+p+ol,
+ol+p {
+    margin-top: -0.5em;
+}
+
+span.mono {
+    font-family: var(--font-mono);
+}
+
+/* ============================================================
+Hyperlinks and buttons
+============================================================ */
+
+a {
+    color: var(--color-link-normal);
     text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition:
+        color 200ms ease,
+        border 200ms ease,
+        text-shadow 200ms ease;
+}
+
+a:is(:hover, :focus) {
+    color: var(--color-link-hover);
+    border-color: var(--color-link-hover);
+}
+
+button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-link-normal);
+    border-radius: 8px;
+    background: var(--mantle);
+    color: var(--color-link-normal);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px var(--crust);
+    transition: 200ms ease;
+}
+
+button:is(:hover, :focus-visible) {
+    border-color: var(--color-link-hover);
+    background: radial-gradient(ellipse at bottom right, var(--surface0), var(--base));
+    color: var(--peach);
+    box-shadow:
+        0 0 8px color-mix(in srgb, var(--color-link-hover) 30%, transparent 70%),
+        0 0 80px color-mix(in srgb, var(--color-link-hover) 30%, transparent 70%),
+        0 10px 24px var(--crust);
+}
+
+button:active {
+    box-shadow: 0 4px 16px var(--crust);
+}
+
+/* ============================================================
+Header and navigation menu
+============================================================ */
+
+.site-header {
+    position: sticky;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    top: 0;
+    z-index: 1000;
+    background: color-mix(in srgb, var(--base) 50%, transparent 50%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+/* inner container that is aligned with main content */
+.site-header>div {
+    margin: 0 auto;
+    width: var(--max-width);
+}
+
+.site-nav {
+    display: flex;
+}
+
+.site-nav>a {
+    border: none;
+    display: inline-block;
+    padding: 1rem 1rem;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
     font-size: 1.2rem;
     font-weight: bold;
-    text-transform: uppercase;
-    color: #0d0950;
+    letter-spacing: 0.15em;
 }
 
-.nav-menu a:hover,
-.nav-menu a:focus {
-    background-color: #ff9776;
+.site-nav>a:is(:hover, :focus-visible) {
+    color: var(--color-link-hover);
+    text-shadow:
+        0 0 32px var(--color-link-hover),
+        0 0 64px var(--color-link-hover);
 }
 
-@media (max-width: 768px) {
-    .nav-menu {
-        display: block;
-        position: static;
-        width: auto;
-        background: none;
-    }
+/* remove padding on first and last elements */
+.site-nav>a:first-of-type {
+    padding-left: 0;
+}
 
-    .nav-menu a {
-        display: block;
-        text-align: center;
-    }
+.site-nav>a:last-of-type {
+    padding-right: 0;
 }
