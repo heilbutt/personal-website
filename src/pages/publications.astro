@@ -1,52 +1,38 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PublicationBox from '../components/PublicationBox.astro';
+import PublicationContainer from '../components/PublicationContainer.astro';
 import '../styles/publications.css';
 
-import {
-    theses,
-    journalArticles,
-    conferencePapers,
-    reports,
-    talks,
-    invitedTalks,
-    posters,
-} from '../lib/publications';
+import { publicationCategories } from '../lib/publications';
 ---
 
 <BaseLayout title="Publications">
-    <h2>Theses</h2>
-    <div class="publications-list-container">
-        {theses.map((pub) => <PublicationBox {...pub} />)}
+    <h1>Publications</h1>
+
+    <p>List of publications of Hermann Pommerenke. Last updated on 16 May 2026.</p>
+
+    <button onclick="window.print();">Printable version / save as PDF</button>
+
+    <p>You can also find me on these platforms:</p>
+    <ul>
+        <li>LinkedIn: <span class="mono"><a href="https://www.linkedin.com/in/hermann-pommerenke">/hermann-pommerenke</a></span></li>
+        <li>ResearchGate: <span class="mono"><a href="https://www.researchgate.net/profile/hermann-pommerenke-2">/hermann-pommerenke-2</a></span></li>
+        <li>ORCID: <span class="mono"><a href="http://orcid.org/0000-0001-8137-3797">0000-0001-8137-3797</a></span></li>
+    </ul>
+
+    <div class="hide-for-print">
+        <p>Jump directly to categories:</p>
+        <ul>
+            {publicationCategories.map((category) => (
+                <li><a href={`#${category.slug}`}>{category.heading}</a></li>
+            ))}
+        </ul>
     </div>
 
-    <h2>Articles in peer-reviewed journals</h2>
-    <div class="publications-list-container">
-        {journalArticles.map((pub) => <PublicationBox {...pub} />)}
-    </div>
-
-    <h2>Articles in conference proceedings</h2>
-    <div class="publications-list-container">
-        {conferencePapers.map((pub) => <PublicationBox {...pub} />)}
-    </div>
-
-    <h2>Technical reports</h2>
-    <div class="publications-list-container">
-        {reports.map((pub) => <PublicationBox {...pub} />)}
-    </div>
-
-    <h2>Invited talks</h2>
-    <div class="publications-list-container">
-        {invitedTalks.map((pub) => <PublicationBox {...pub} />)}
-    </div>
-
-    <h2>Talks</h2>
-    <div class="publications-list-container">
-        {talks.map((pub) => <PublicationBox {...pub} />)}
-    </div>
-
-    <h2>Posters</h2>
-    <div class="publications-list-container">
-        {posters.map((pub) => <PublicationBox {...pub} />)}
-    </div>
+    {publicationCategories.map((category) => (
+        <section>
+            <h2 id={category.slug}>{category.heading}</h2>
+            {category.publications.map((pub) => <PublicationContainer {...pub} />)}
+        </section>
+    ))}
 </BaseLayout>

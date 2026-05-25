@@ -1,9 +1,11 @@
 import { getCollection } from 'astro:content';
-const publications = await getCollection('publications');
+const publicationsFromZotero = await getCollection('publicationsFromZotero');
 
 import type { CollectionEntry } from 'astro:content';
-type Publication = CollectionEntry<'publications'>;
-type Author = CollectionEntry<'publications'>['data']['author'][number];
+
+// Zotero datatypes as defined using zod in content.config.ts
+type PublicationFromZotero = CollectionEntry<'publicationsFromZotero'>;
+type AuthorFromZotero = CollectionEntry<'publicationsFromZotero'>['data']['author'][number];
 
 // Helper to format given name of the author to initials
 function formatGivenName(givenName: string) {
@@ -16,7 +18,7 @@ function formatGivenName(givenName: string) {
 }
 
 // Helper to format one author name
-function formatOneAuthor(author: Author) {
+function formatOneAuthor(author: AuthorFromZotero) {
     const lastName = author['non-dropping-particle']
         ? author['non-dropping-particle'] + ' ' + author['family']
         : author['family'];
@@ -25,7 +27,7 @@ function formatOneAuthor(author: Author) {
 
 // Helper to format list of authors
 export function formatAuthors(
-    authors: Author[],
+    authors: AuthorFromZotero[],
     maxAuthors = 3,
 ) {
     const shownAuthors = authors
@@ -38,7 +40,7 @@ export function formatAuthors(
 }
 
 // Helper to get either DOI or URL from publication, if any
-function getPublicationLink(pub: Publication) {
+function getPublicationLink(pub: PublicationFromZotero) {
     if (pub.data['DOI']) {
         return {
             prefix: 'DOI: ',
@@ -61,9 +63,32 @@ function isNonNullable<T>(value: T): value is NonNullable<T> {
     return (value !== null) && (value !== undefined);
 }
 
-// Define and export arrays for each publication type
+// Define arrays for each publication category.
+// Convert the Zotero-datatype to homogeneous simplified type
+// that will be used to output the actual HTML.
+// The caterogies (types) coming from Zotero each have 
+// partially different fields (see content.config.ts), so each
+// category has to be handled separately
 
-export const theses = publications.map((pub) => {
+// Simplified homogenous types for outputting HTML
+type Publication = {
+    title: string,
+    authors: string,
+    meta: string, // any metadata, e.g. Journal, conference location, ...
+    link: { // optionally DOI or URL
+        prefix: string,
+        text: string,
+        href: string
+    } | null
+}
+
+type PublicationCategory = {
+    heading: string; // Headline to be printed
+    slug: string // URL slug for anchor links
+    publications: Publication[]; // list of pubs of this category
+};
+
+const theses: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'thesis')
         return null;
     return {
@@ -79,7 +104,7 @@ export const theses = publications.map((pub) => {
     };
 }).filter(isNonNullable);
 
-export const journalArticles = publications.map((pub) => {
+const journalArticles: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'article-journal')
         return null;
     return {
@@ -95,7 +120,7 @@ export const journalArticles = publications.map((pub) => {
     };
 }).filter(isNonNullable);
 
-export const conferencePapers = publications.map((pub) => {
+const conferenceArticles: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'paper-conference')
         return null;
     return {
@@ -111,7 +136,7 @@ export const conferencePapers = publications.map((pub) => {
     };
 }).filter(isNonNullable);
 
-export const reports = publications.map((pub) => {
+const reports: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'report')
         return null;
     return {
@@ -127,7 +152,7 @@ export const reports = publications.map((pub) => {
     };
 }).filter(isNonNullable);
 
-export const talks = publications.map((pub) => {
+const talks: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'speech')
         return null;
     if (pub.data['genre'] !== 'Talk')
@@ -144,7 +169,7 @@ export const talks = publications.map((pub) => {
     };
 }).filter(isNonNullable);
 
-export const invitedTalks = publications.map((pub) => {
+const invitedTalks: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'speech')
         return null;
     if (pub.data['genre'] !== 'Invited Talk')
@@ -161,7 +186,7 @@ export const invitedTalks = publications.map((pub) => {
     };
 }).filter(isNonNullable);
 
-export const posters = publications.map((pub) => {
+const posters: Publication[] = publicationsFromZotero.map((pub) => {
     if (pub.data['type'] !== 'speech')
         return null;
     if (pub.data['genre'] !== 'Poster')
@@ -177,3 +202,45 @@ export const posters = publications.map((pub) => {
         link: getPublicationLink(pub)
     };
 }).filter(isNonNullable);
+
+// Define and export array of publication categories
+// together with printed category title. The order of this array
+// determines the order in the output HTML.
+
+export const publicationCategories: PublicationCategory[] = [
+    {
+        heading: 'Articles in peer-reviewed journals',
+        slug: 'journal-articles',
+        publications: journalArticles
+    },
+    {
+        heading: 'Articles in conference proceedings',
+        slug: 'conference-articles',
+        publications: conferenceArticles
+    },
+    {
+        heading: 'Theses',
+        slug: 'theses',
+        publications: theses
+    },
+    {
+        heading: 'Technical reports',
+        slug: 'reports',
+        publications: reports
+    },
+    {
+        heading: 'Invited talks',
+        slug: 'invited-talks',
+        publications: invitedTalks
+    },
+    {
+        heading: 'Talks',
+        slug: 'talks',
+        publications: talks
+    },
+    {
+        heading: 'Posters',
+        slug: 'posters',
+        publications: posters
+    },
+];
