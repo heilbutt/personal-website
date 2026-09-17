@@ -2,14 +2,14 @@
 import Navigation from './Navigation.astro';
 ---
 
-<header class="site-header">
+<header>
     <div>
         <Navigation />
     </div>
 </header>
 
 <style>
-    .site-header {
+    header {
         position: sticky;
         width: 100vw;
         margin-left: calc(50% - 50vw);
@@ -22,7 +22,7 @@ import Navigation from './Navigation.astro';
     }
 
     /* inner container that is aligned with main content */
-    .site-header > div {
+    header > div {
         margin: 0 auto;
         width: var(--max-width);
     }

@@ -1,15 +1,15 @@
-<nav class="site-nav">
+<nav>
     <a href="/">Home</a>
     <a href="/publications/">Publications</a>
     <a href="/about/">About</a>
 </nav>
 
 <style>
-    .site-nav {
+    nav {
         display: flex;
     }
 
-    .site-nav>a {
+    nav>a {
         border: none;
         display: inline-block;
         padding: 1.5rem 0.8rem;
@@ -20,7 +20,7 @@
         letter-spacing: 0.1em;
     }
 
-    .site-nav>a:is(:hover, :focus-visible) {
+    nav>a:is(:hover, :focus-visible) {
         color: var(--color-link-hover);
         text-decoration: underline;
         text-shadow:
@@ -29,11 +29,11 @@
     }
 
     /* remove padding on first and last elements */
-    .site-nav>a:first-of-type {
+    nav>a:first-of-type {
         padding-left: 0;
     }
 
-    .site-nav>a:last-of-type {
+    nav>a:last-of-type {
         padding-right: 0;
     }
 </style>
