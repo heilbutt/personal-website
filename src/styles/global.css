@@ -36,7 +36,8 @@ Global CSS styling for gruvbox look
 
     /* Colors for specific purposes, use for consistency */
     --color-text: var(--fg-0);
-    --color-text-muted: var(--fg-1);
+    --color-text-secondary: var(--fg-1);
+    --color-text-tertiary: var(--fg-2);
     --color-accent: var(--orange);
     --color-accent-2: var(--aqua);
     --color-link-normal: var(--blue);

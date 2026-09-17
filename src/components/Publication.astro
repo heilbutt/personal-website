@@ -22,15 +22,7 @@ const { publication } = Astro.props;
     article {
         background: var(--color-surface);
         border: 1px solid var(--color-border);
-        border-radius: 8px;
         padding: 1rem;
-        box-shadow: 0 4px 16px var(--color-shadow);
-        transition: 200ms ease;
-    }
-
-    article:is(:hover, :focus-within) {
-        background: radial-gradient(ellipse at bottom right, var(--color-surface-hover), var(--bg-0));
-        border-color: var(--gray);
     }
 
     article>h3 {
@@ -44,7 +36,7 @@ const { publication } = Astro.props;
     article>p {
         margin-top: 0.3rem;
         margin-bottom: 0;
-        color: var(--color-text-muted);
+        color: var(--color-text-tertiary);
     }
 
     article>p.link {
