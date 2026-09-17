@@ -1,41 +1,50 @@
 /* ============================================================
-Global CSS styling
+Global CSS styling for gruvbox look
 ============================================================ */
 
+/* light-mode colors */
 :root {
-    /* Catppuccin Mocha colors: https://catppuccin.com/palette/ */
-    --rosewater: rgb(245, 224, 220);
-    --flamingo: rgb(242, 205, 205);
-    --pink: rgb(245, 194, 231);
-    --mauve: rgb(203, 166, 247);
-    --red: rgb(243, 140, 169);
-    --maroon: rgb(235, 160, 172);
-    --peach: rgb(250, 179, 135);
-    --yellow: rgb(249, 226, 175);
-    --green: rgb(166, 227, 161);
-    --teal: rgb(148, 226, 213);
-    --sky: rgb(137, 220, 235);
-    --sapphire: rgb(116, 199, 236);
-    --blue: rgb(137, 180, 250);
-    --lavender: rgb(180, 190, 254);
-    --text: rgb(205, 214, 244);
-    --subtext1: rgb(186, 194, 222);
-    --subtext0: rgb(166, 173, 201);
-    --overlay2: rgb(148, 154, 179);
-    --overlay1: rgb(128, 133, 157);
-    --overlay0: rgb(108, 112, 134);
-    --surface2: rgb(88, 91, 112);
-    --surface1: rgb(69, 71, 90);
-    --surface0: rgb(49, 50, 68);
-    --base: rgb(30, 30, 46);
-    --mantle: rgb(24, 24, 37);
-    --crust: rgb(17, 17, 27);
+    color-scheme: light;
+
+    /* surfaces: muted neutral paper, not gruvbox cream */
+    /* page background */
+    --bg-0: #f4f2ee;
+    /* raised surface: cards, header */
+    --bg-1: #ebe8e2;
+    /* hover/active surface */
+    --bg-2: #ddd9d1;
+    /* borders, dividers */
+    --bg-3: #c7c1b6;
+    
+    /* text */
+    /* primary text */
+    --fg-0: #2b2926;
+    /* secondary text */
+    --fg-1: #524d46;
+    /* muted/placeholder text */
+    --fg-2: #7c7468;
+    
+    /* gruvbox accent hues (faded set for light bg) */
+    --red: #9d0006;
+    --green: #79740e;
+    --yellow: #b57614;
+    --blue: #076678;
+    --purple: #8f3f71;
+    --aqua: #427b58;
+    --orange: #af3a03;
+    --gray: var(--fg-2);
 
     /* Colors for specific purposes, use for consistency */
-    --color-text: var(--text);
-    --color-accent: var(--mauve);
+    --color-text: var(--fg-0);
+    --color-text-muted: var(--fg-1);
+    --color-accent: var(--orange);
+    --color-accent-2: var(--aqua);
     --color-link-normal: var(--blue);
-    --color-link-hover: var(--mauve);
+    --color-link-hover: var(--orange);
+    --color-surface: var(--bg-1);
+    --color-surface-hover: var(--bg-2);
+    --color-border: var(--bg-3);
+    --color-shadow: #00000059;
 
     /* type face */
     --font-sans: sans-serif;
@@ -43,6 +52,31 @@ Global CSS styling
 
     /* Site geometry */
     --max-width: 80ch;
+}
+
+/* dark mode colors */
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+
+        --bg-0: #1e1e1e;
+        --bg-1: #262626;
+        --bg-2: #333333;
+        --bg-3: #474747;
+
+        --fg-0: #ebe6e0;
+        --fg-1: #c9c2b8;
+        --fg-2: #948e85;
+
+        /* gruvbox accent hues (bright set for dark bg) */
+        --red: #fb4934;
+        --green: #b8bb26;
+        --yellow: #fabd2f;
+        --blue: #83a598;
+        --purple: #d3869b;
+        --aqua: #8ec07c;
+        --orange: #fe8019;
+    }
 }
 
 /* ============================================================
@@ -55,7 +89,7 @@ Main geometry
 
 html {
     /* fallback background color */
-    background-color: var(--base);
+    background-color: var(--bg-0);
     /* offset anchor links for sticky header */
     scroll-padding-top: 4rem;
 }
@@ -66,7 +100,7 @@ body {
     width: 100%;
     max-width: var(--max-width);
     font-family: var(--font-sans);
-    background-color: var(--base);
+    background-color: var(--bg-0);
     color: var(--color-text);
 }
 
@@ -90,7 +124,7 @@ h1 {
 h2 {
     font-size: 2rem;
     margin-top: 3rem;
-    margin-bottom: 2rem; 
+    margin-bottom: 2rem;
 }
 
 ul {
@@ -121,45 +155,12 @@ Links and buttons
 a {
     color: var(--color-link-normal);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid;
     transition:
-        color 200ms ease,
-        border 200ms ease,
-        text-shadow 200ms ease,
-        text-decoration 200ms ease;
+        color 200ms ease;
 }
 
 a:is(:hover, :focus) {
     color: var(--color-link-hover);
     border-color: var(--color-link-hover);
-}
-
-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1rem;
-    border: 1px solid var(--color-link-normal);
-    border-radius: 8px;
-    background: var(--mantle);
-    color: var(--color-link-normal);
-    font: inherit;
-    text-decoration: none;
-    cursor: pointer;
-    box-shadow: 0 4px 16px var(--crust);
-    transition: 200ms ease;
-}
-
-button:is(:hover, :focus-visible) {
-    border-color: var(--color-link-hover);
-    background: radial-gradient(ellipse at bottom right, var(--surface0), var(--base));
-    color: var(--peach);
-    box-shadow:
-        0 0 8px color-mix(in srgb, var(--color-link-hover) 30%, transparent 70%),
-        0 0 80px color-mix(in srgb, var(--color-link-hover) 30%, transparent 70%),
-        0 10px 24px var(--crust);
-}
-
-button:active {
-    box-shadow: 0 4px 16px var(--crust);
 }
