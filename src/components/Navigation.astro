@@ -9,28 +9,83 @@
         display: flex;
     }
 
+    nav {
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+
     nav>a {
-        border: none;
+        /* rainbow: cycle through the gruvbox accent hues */
+        --button-shadow: color-mix(in srgb, var(--button-color) 50%, black);
+        --button-glow: color-mix(in srgb, var(--button-color) 80%, #ffffff88);
+
         display: inline-block;
-        padding: 1.5rem 0.8rem;
+        border: none;
+        border-radius: 0.35rem;
+        padding: 0.7rem 1.2rem;
         text-transform: uppercase;
         font-family: var(--font-mono);
         font-size: 1.2rem;
         font-weight: bold;
         letter-spacing: 0.1em;
+        text-decoration: none;
+        color: var(--bg-0);
+        filter: brightness(0.9);
+        background: var(--button-color);
+        /* simulate 3D extrusion with shadow; glow starts off */
+        box-shadow:
+            inset 0 0 6px 0 var(--button-shadow),
+            0 6px 0 0 var(--button-shadow),
+            0 0 0 0 var(--button-glow);
+        transform: translateY(0);
+        transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
     }
 
+    nav>a:nth-of-type(7n+1) {
+        --button-color: var(--red);
+    }
+
+    nav>a:nth-of-type(7n+2) {
+        --button-color: var(--orange);
+    }
+
+    nav>a:nth-of-type(7n+3) {
+        --button-color: var(--yellow);
+    }
+
+    nav>a:nth-of-type(7n+4) {
+        --button-color: var(--green);
+    }
+
+    nav>a:nth-of-type(7n+5) {
+        --button-color: var(--aqua);
+    }
+
+    nav>a:nth-of-type(7n+6) {
+        --button-color: var(--blue);
+    }
+
+    nav>a:nth-of-type(7n+7) {
+        --button-color: var(--purple);
+    }
+
+    /* raise on hover, lamp starts glowing */
     nav>a:is(:hover, :focus-visible) {
-        color: var(--color-link-hover);
-        text-decoration: underline;
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+        box-shadow:
+            inset 0 0 6px 0 var(--button-shadow),
+            0 8px 0 0 var(--button-shadow),
+            0 4px 64px 0 var(--button-glow);
     }
 
-    /* remove padding on first and last elements */
-    nav>a:first-of-type {
-        padding-left: 0;
-    }
-
-    nav>a:last-of-type {
-        padding-right: 0;
+    /* press down on click, lamp lights up fully */
+    nav>a:active {
+        transform: translateY(6px);
+        filter: brightness(1.1);
+        box-shadow:
+            inset 0 0 6px 0 var(--button-shadow),
+            0 0 0 0 var(--button-shadow),
+            0 0 64px 0 var(--button-glow);
     }
 </style>

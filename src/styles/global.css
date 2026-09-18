@@ -48,6 +48,7 @@ Global CSS styling for gruvbox look
     --color-shadow: #00000059;
 
     /* type face */
+    --font-serif: serif;
     --font-sans: sans-serif;
     --font-mono: "Roboto Mono", "Fira Code", "SF Mono", "Segoe UI Mono", "Courier New", monospace;
 
@@ -111,13 +112,11 @@ Typgraphy
 
 h1,
 h2 {
-    color: var(--color-accent);
-    font-family: var(--font-mono);
+    font-family: var(--font-serif);
 }
 
 h1 {
-    font-size: 4rem;
-    letter-spacing: -0.02em;
+    font-size: 6rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
 }
@@ -147,16 +146,17 @@ ol+p {
 
 span.mono {
     font-family: var(--font-mono);
+    font-weight: bold;
 }
 
 /* ============================================================
-Links and buttons
+Links
 ============================================================ */
 
 a {
     color: var(--color-link-normal);
-    text-decoration: none;
-    border-bottom: 1px solid;
+    text-decoration: underline;
+    /*border-bottom: 1px solid;*/
     transition:
         color 200ms ease;
 }
