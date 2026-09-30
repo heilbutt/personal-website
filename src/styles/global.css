@@ -138,10 +138,10 @@ ul.no-bullets {
 }
 
 /* reduce vertical space between lists and paragraphs */
-p+ul,
-ul+p,
-p+ol,
-ol+p {
+p + ul,
+ul + p,
+p + ol,
+ol + p {
     margin-top: -0.5em;
 }
 

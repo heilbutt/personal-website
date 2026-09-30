@@ -1,9 +1,15 @@
 ---
+// Layout for markdown pages
+
 import BaseLayout from './BaseLayout.astro';
 
-const { frontmatter } = Astro.props;
+interface Props {
+    frontmatter: {
+        title: string
+    }
+}
 ---
 
-<BaseLayout title={frontmatter.title}>
+<BaseLayout title={Astro.props.frontmatter.title}>
     <slot />
 </BaseLayout>

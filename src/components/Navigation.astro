@@ -1,3 +1,7 @@
+---
+// Main site navigation bar
+---
+
 <nav>
     <a href="/">Home</a>
     <a href="/publications/">Publications</a>
@@ -8,14 +12,11 @@
 <style>
     nav {
         display: flex;
-    }
-
-    nav {
         gap: 1rem;
         padding: 1rem 0;
     }
 
-    nav>a {
+    nav > a {
         /* rainbow: cycle through the gruvbox accent hues */
         --button-shadow: color-mix(in srgb, var(--button-color) 50%, black);
         --button-glow: color-mix(in srgb, var(--button-color) 70%, transparent);
@@ -42,36 +43,36 @@
         transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
     }
 
-    nav>a:nth-of-type(7n+1) {
+    nav > a:nth-of-type(7n+1) {
         --button-color: var(--red);
     }
 
-    nav>a:nth-of-type(7n+2) {
+    nav > a:nth-of-type(7n+2) {
         --button-color: var(--orange);
     }
 
-    nav>a:nth-of-type(7n+3) {
+    nav > a:nth-of-type(7n+3) {
         --button-color: var(--yellow);
     }
 
-    nav>a:nth-of-type(7n+4) {
+    nav > a:nth-of-type(7n+4) {
         --button-color: var(--green);
     }
 
-    nav>a:nth-of-type(7n+5) {
+    nav > a:nth-of-type(7n+5) {
         --button-color: var(--aqua);
     }
 
-    nav>a:nth-of-type(7n+6) {
+    nav > a:nth-of-type(7n+6) {
         --button-color: var(--blue);
     }
 
-    nav>a:nth-of-type(7n+7) {
+    nav > a:nth-of-type(7n+7) {
         --button-color: var(--purple);
     }
 
     /* raise on hover, lamp starts glowing */
-    nav>a:is(:hover, :focus-visible) {
+    nav > a:is(:hover, :focus-visible) {
         transform: translateY(-2px);
         filter: brightness(1.1);
         box-shadow:
@@ -81,7 +82,7 @@
     }
 
     /* press down on click, lamp lights up fully */
-    nav>a:active {
+    nav > a:active {
         transform: translateY(6px);
         filter: brightness(1.1);
         box-shadow:

@@ -1,10 +1,10 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import { LICENSE_URLS } from '../content-collections/gallery';
+import { LICENSE_URLS } from '../content.config';
 
 // Photo gallery: pairs originals with their YAML files, checks that they match
-// up, and prepares the data for the pages. Schemas: collections/gallery.ts
+// up, and prepares the data for the pages. Schemas: content.config.ts
 
 type PhotoEntry = CollectionEntry<'galleryPhotos'>;
 

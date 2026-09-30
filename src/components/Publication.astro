@@ -1,5 +1,7 @@
 ---
-import type { Publication } from '../lib/publications';
+// One publication within a publication category
+
+import { type Publication } from '../lib/publications';
 
 interface Props {
     publication: Publication
@@ -7,7 +9,7 @@ interface Props {
 const { publication } = Astro.props;
 ---
 
-<article>
+<article class="publication">
     <h3>{publication.title}</h3>
     <p class="authors">{publication.authors}</p>
     <p class="meta">{publication.meta}</p>
@@ -19,13 +21,13 @@ const { publication } = Astro.props;
 </article>
 
 <style>
-    article {
+    .publication {
         background: var(--color-surface);
         /*border: 1px solid var(--color-border);*/
         padding: 1rem;
     }
 
-    article>h3 {
+    .publication > h3 {
         margin: 0;
         font-size: 1rem;
         font-weight: normal;
@@ -33,13 +35,13 @@ const { publication } = Astro.props;
         letter-spacing: 0.01em;
     }
 
-    article>p {
+    .publication > p {
         margin-top: 0.3rem;
         margin-bottom: 0;
         color: var(--color-text-tertiary);
     }
 
-    article>p.link {
+    .publication > p.link {
         font-family: var(--font-mono);
         font-weight: bold;
     }

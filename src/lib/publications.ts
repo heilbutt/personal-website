@@ -90,7 +90,7 @@ export interface Publication {
     title: string,
     authors: string,
     meta: string, // any metadata, e.g. Journal, conference location, ...
-    link: PublicationLink | null// optionally DOI or URL
+    link: PublicationLink | null // optionally DOI or URL
 }
 
 // Publication category: heading, URL slug, and the list of pubs

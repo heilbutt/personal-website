@@ -21,7 +21,7 @@ const photos = await Promise.all(album.photos.map(async (photo) => (
 
 <BaseLayout title={album.title}>
     <header>
-        <p><a href="/gallery/">← Gallery</a></p>
+        <p><a href="/photos/">← Photos</a></p>
         <h1>{album.title}</h1>
         {album.description && <p>{album.description}</p>}
     </header>
