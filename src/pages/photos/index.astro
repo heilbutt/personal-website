@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { galleryAlbums } from '../../lib/gallery';
+
+const metadata = {
+    title: 'Gallery'
+}
+---
+
+<BaseLayout {...metadata}>
+    <header>
+        <h1>{metadata.title}</h1>
+    </header>
+
+    <ul class="albums">
+        {galleryAlbums.map((album) => (
+            <li>
+                <a href={`/gallery/${album.slug}/`}>
+                    <Image src={album.cover.original} width={600} height={600} fit="cover" alt={album.cover.title} />
+                    <span>{album.title}</span>
+                </a>
+                <small>{album.photos.length} {album.photos.length === 1 ? 'photo' : 'photos'}</small>
+            </li>
+        ))}
+    </ul>
+</BaseLayout>
+
+<style>
+    .albums {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+        gap: 1.5rem;
+        padding: 0;
+        list-style: none;
+    }
+
+    .albums a {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .albums img {
+        width: 100%;
+        height: auto;
+    }
+</style>

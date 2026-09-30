@@ -11,3 +11,6 @@ pnpm-debug.log*
 
 # OS files
 .DS_Store
+
+# photo gallery originals
+media/

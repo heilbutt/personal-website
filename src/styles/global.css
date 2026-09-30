@@ -61,6 +61,7 @@ Global CSS styling for gruvbox look
     :root {
         color-scheme: dark;
 
+        /* see above for the typical use cases */
         --bg-0: #1e1e1e;
         --bg-1: #262626;
         --bg-2: #333333;

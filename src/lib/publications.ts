@@ -1,13 +1,17 @@
 import { getCollection } from 'astro:content';
-const publicationsFromZotero = await getCollection('publicationsFromZotero');
-
 import type { CollectionEntry } from 'astro:content';
+
+// Processing functions for list of publications.
+// This script takes the content collection from content.config.ts 
+// and processes it for presentation in the publications page.
+
+const publicationsFromZotero = await getCollection('publicationsFromZotero');
 
 // Zotero datatypes as defined using zod in content.config.ts
 type PublicationFromZotero = CollectionEntry<'publicationsFromZotero'>;
 type PublicationDataFromZotero = PublicationFromZotero['data'];
-type PublicationTypeFromZotero = PublicationDataFromZotero['type'];
-type AuthorFromZotero = PublicationDataFromZotero['author'][number];
+type PublicationTypeFromZotero = PublicationFromZotero['data']['type'];
+type AuthorFromZotero = PublicationFromZotero['data']['author'][number];
 
 // Narrows the union of Zotero data shapes down to the one matching `type`
 type DataOfType<T extends PublicationTypeFromZotero> =
@@ -24,7 +28,7 @@ function formatGivenName(givenName: string) {
 }
 
 // Format one author name
-function formatOneAuthor(author: AuthorFromZotero) {
+function formatOneAuthor(author: AuthorFromZotero): string {
     const lastName = author['non-dropping-particle']
         ? author['non-dropping-particle'] + ' ' + author['family']
         : author['family'];
@@ -32,7 +36,7 @@ function formatOneAuthor(author: AuthorFromZotero) {
 }
 
 // Format list of authors
-function formatAuthors(authors: AuthorFromZotero[], maxAuthors = 3) {
+function formatAuthors(authors: AuthorFromZotero[], maxAuthors: number = 3): string {
     const shownAuthors = authors
         .slice(0, maxAuthors)
         .map(formatOneAuthor)
@@ -43,7 +47,9 @@ function formatAuthors(authors: AuthorFromZotero[], maxAuthors = 3) {
 }
 
 // Get either DOI or URL from publication, if any
-function getPublicationLink(pub: PublicationFromZotero) {
+interface PublicationLink {prefix: string, text: string, href: string}
+
+function getPublicationLink(pub: PublicationFromZotero): PublicationLink | null {
     if (pub.data['DOI']) {
         return {
             prefix: 'DOI: ',
@@ -68,7 +74,7 @@ function getPublicationLink(pub: PublicationFromZotero) {
 }
 
 // Get the publication year as a string
-function year(data: { issued: Date }) {
+function getYear(data: { issued: Date }): string {
     return data.issued.getFullYear().toString();
 }
 
@@ -80,20 +86,16 @@ function isType<T extends PublicationTypeFromZotero>(type: T) {
 
 // Simplified homogenous types for outputting HTML
 // type export for the Astro page files
-export type Publication = {
+export interface Publication {
     title: string,
     authors: string,
     meta: string, // any metadata, e.g. Journal, conference location, ...
-    link: { // optionally DOI or URL
-        prefix: string,
-        text: string,
-        href: string
-    } | null
+    link: PublicationLink | null// optionally DOI or URL
 }
 
 // Publication category: heading, URL slug, and the list of pubs
 // type export for the Astro page files
-export type PublicationCategory = {
+export interface PublicationCategory {
     heading: string; // Headline to be printed
     slug: string // URL slug for anchor links
     publications: Publication[]; // list of pubs of this category
@@ -109,10 +111,9 @@ function toPublication(pub: PublicationFromZotero, ...metaParts: (string | undef
     };
 }
 
-// Declarative definition of one publication category: which Zotero `type`
-// (and optionally `genre`, via `filter`) it draws from, and how to build
-// its `meta` line. Add/change a category here, this owns presentation.
-// content.config.ts still owns field validation.
+// Declarative definition of one publication category:
+// Which Zotero `type` (and optionally `genre`) it draws from,
+// and how to build the `meta` line.
 function defineCategory<T extends PublicationTypeFromZotero>(config: {
     heading: string;
     slug: string;
@@ -139,7 +140,7 @@ export const publicationCategories: PublicationCategory[] = [
             data['container-title'],
             data['volume'],
             data['issue'],
-            year(data),
+            getYear(data),
         ],
     }),
     defineCategory({
@@ -150,7 +151,7 @@ export const publicationCategories: PublicationCategory[] = [
             data['container-title'],
             data['event-place'],
             data['publisher'],
-            year(data),
+            getYear(data),
         ],
     }),
     defineCategory({
@@ -161,7 +162,7 @@ export const publicationCategories: PublicationCategory[] = [
             data['genre'],
             data['publisher'],
             data['publisher-place'],
-            year(data),
+            getYear(data),
         ],
     }),
     defineCategory({
@@ -172,7 +173,7 @@ export const publicationCategories: PublicationCategory[] = [
             data['publisher'],
             data['publisher-place'],
             data['number'],
-            year(data),
+            getYear(data),
         ],
     }),
     defineCategory({
@@ -183,7 +184,7 @@ export const publicationCategories: PublicationCategory[] = [
         meta: (data) => [
             'Presentation given at the ' + data['event-title'],
             data['event-place'],
-            year(data),
+            getYear(data),
         ],
     }),
     defineCategory({
@@ -194,7 +195,7 @@ export const publicationCategories: PublicationCategory[] = [
         meta: (data) => [
             'Presentation given at the ' + data['event-title'],
             data['event-place'],
-            year(data),
+            getYear(data),
         ],
     }),
     defineCategory({
@@ -205,7 +206,7 @@ export const publicationCategories: PublicationCategory[] = [
         meta: (data) => [
             'Poster presented at the ' + data['event-title'],
             data['event-place'],
-            year(data),
+            getYear(data),
         ],
     }),
 ];

@@ -1,6 +1,7 @@
 <nav>
     <a href="/">Home</a>
     <a href="/publications/">Publications</a>
+    <a href="/photos/">Photos</a>
     <a href="/about/">About</a>
 </nav>
 
@@ -17,7 +18,7 @@
     nav>a {
         /* rainbow: cycle through the gruvbox accent hues */
         --button-shadow: color-mix(in srgb, var(--button-color) 50%, black);
-        --button-glow: color-mix(in srgb, var(--button-color) 80%, #ffffff88);
+        --button-glow: color-mix(in srgb, var(--button-color) 70%, transparent);
 
         display: inline-block;
         border: none;
@@ -30,7 +31,7 @@
         letter-spacing: 0.1em;
         text-decoration: none;
         color: var(--bg-0);
-        filter: brightness(0.9);
+        filter: brightness(0.8);
         background: var(--button-color);
         /* simulate 3D extrusion with shadow; glow starts off */
         box-shadow:

@@ -1,0 +1,91 @@
+// Creates the missing gallery YAML files, filled in from the image EXIF data.
+// Run with `npm run gallery:scaffold` after adding photos to media/originals/<album>/.
+// Existing files are never modified.
+
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+import exifr from 'exifr';
+
+const ORIGINALS_DIR = 'media/originals';
+const CONTENT_DIR = 'src/content/gallery';
+const DEFAULT_AUTHOR = 'Hermann Pommerenke';
+const DEFAULT_LICENSE = 'all-rights-reserved';
+
+// Get title from XMP dc:title (Lightroom, darktable), IPTC, or Windows metadata.
+// XMP titles come as { lang, value }, a list of those, or a plain string.
+function getTitleFromExif(exif: Record<string, any>): string | undefined {
+    const xmpTitle = [exif.title].flat()[0];
+    return xmpTitle?.value ?? xmpTitle ?? exif.ObjectName ?? exif.XPTitle;
+}
+
+// Get title from file name (e.g. "zermatt-night" -> "Zermatt night")
+function getTitleFromName(name: string): string {
+    const words = name.replace(/[-_]/g, ' ');
+    return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+// Format exposure string (e.g. "1/250 s, f/8, ISO 100, 35 mm")
+function getExposureFromExif(exif: Record<string, any>): string | undefined {
+    const { ExposureTime: time, FNumber: aperture, ISO: iso, FocalLength: focal } = exif;
+    const parts = [
+        time && (time < 1 ? `1/${Math.round(1 / time)} s` : `${time} s`),
+        aperture && `f/${aperture}`,
+        iso && `ISO ${iso}`,
+        focal && `${Math.round(focal)} mm`,
+    ];
+    return parts.filter(Boolean).join(', ') || undefined;
+}
+
+// Format camera name (e.g. "Canon" + "Canon EOS R5" -> "Canon EOS R5")
+function formatCamera(make?: string, model?: string): string | undefined {
+    return make && model && !model.startsWith(make) ? `${make} ${model}` : model ?? make;
+}
+
+// Format date to "2025-08-14".
+function formatDate(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+// Get metadata of photo from its EXIF data
+async function photoData(image: string, name: string) {
+    const exif = (await exifr.parse(image, { xmp: true, iptc: true })) ?? {};
+    const date: Date | undefined = exif.DateTimeOriginal ?? exif.CreateDate;
+    return {
+        title: getTitleFromExif(exif) || getTitleFromName(name),
+        description: '',
+        date: date && formatDate(date), // left out if unknown, the build will ask for it
+        author: exif.Artist || DEFAULT_AUTHOR,
+        license: DEFAULT_LICENSE,
+        camera: formatCamera(exif.Make, exif.Model),
+        lens: exif.LensModel,
+        exposure: getExposureFromExif(exif),
+    };
+}
+
+// Write YAML file
+function writeYaml(file: string, data: object) {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    const text = yaml
+        .dump(data, { skipInvalid: true }) // skips undefined fields
+        .replace(/^date: '(.+)'$/m, 'date: $1'); // unquote, so YAML reads it as a date
+    fs.writeFileSync(file, text);
+    console.log(`created ${file}`);
+}
+
+// Script entry point
+for (const image of fs.globSync(`${ORIGINALS_DIR}/*/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG}`)) {
+    const album = path.basename(path.dirname(image));
+    const name = path.parse(image).name;
+
+    const albumFile = path.join(CONTENT_DIR, album, '_album.yaml');
+    if (!fs.existsSync(albumFile)) {
+        writeYaml(albumFile, { title: getTitleFromName(album), description: '' });
+    }
+
+    const photoFile = path.join(CONTENT_DIR, album, name + '.yaml');
+    if (!fs.existsSync(photoFile)) {
+        writeYaml(photoFile, await photoData(image, name));
+    }
+}
