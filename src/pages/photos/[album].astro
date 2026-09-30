@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { albums, type GalleryAlbum } from '../../lib/gallery';
-import GalleryPhoto from '../../components/GalleryPhoto.astro';
+import LightboxPhoto from '../../components/LightboxPhoto.astro';
 
 // gets called by Astro to fill the [album].astro pages
 export function getStaticPaths() {
@@ -26,7 +26,7 @@ const { album } = Astro.props;
 
     <div id="gallery">
         {album.photos.map((photo) => (
-            <GalleryPhoto photo={photo} />
+            <LightboxPhoto photo={photo} />
         ))}
     </div>
 </BaseLayout>
@@ -40,6 +40,7 @@ const { album } = Astro.props;
     const lightbox = new PhotoSwipeLightbox({
         gallery: '#gallery',
         children: 'figure', // PhotoSwipe opens the first link inside
+        showHideAnimationType: 'none',
         pswpModule: () => import('photoswipe'),
     });
     new PhotoSwipeDynamicCaption(lightbox, { type: 'auto' });

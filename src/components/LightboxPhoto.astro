@@ -2,7 +2,7 @@
 // One photo within a gallery album.
 
 import { Image } from 'astro:assets';
-import { getPhotoSwipeImage, type GalleryPhoto } from '../lib/gallery';
+import { getPhotoSwipeImage as getLightboxImage, type GalleryPhoto } from '../lib/gallery';
 
 interface Props {
     photo: GalleryPhoto
@@ -11,7 +11,7 @@ const { photo } = Astro.props;
 
 // Get the lightbox information only here, because r
 // running it from lib/gallery.ts hangs the build process
-const lightbox = await getPhotoSwipeImage(photo);
+const lightbox = await getLightboxImage(photo);
 ---
 
 <figure>
