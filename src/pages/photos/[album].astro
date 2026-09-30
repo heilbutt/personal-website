@@ -1,10 +1,11 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { galleryAlbums, getLightboxImage, type GalleryAlbum } from '../../lib/gallery';
+import { albums, type GalleryAlbum } from '../../lib/gallery';
+import GalleryPhoto from '../../components/GalleryPhoto.astro';
 
+// gets called by Astro to fill the [album].astro pages
 export function getStaticPaths() {
-    return galleryAlbums.map((album) => ({
+    return albums.map((album) => ({
         params: { album: album.slug },
         props: { album },
     }));
@@ -14,9 +15,6 @@ interface Props {
     album: GalleryAlbum
 }
 const { album } = Astro.props;
-const photos = await Promise.all(album.photos.map(async (photo) => (
-    { ...photo, lightbox: await getLightboxImage(photo) }
-)));
 ---
 
 <BaseLayout title={album.title}>
@@ -27,32 +25,8 @@ const photos = await Promise.all(album.photos.map(async (photo) => (
     </header>
 
     <div id="gallery">
-        {photos.map((photo) => (
-            <figure>
-                <a
-                    href={photo.lightbox.src}
-                    data-pswp-width={photo.lightbox.width}
-                    data-pswp-height={photo.lightbox.height}
-                    target="_blank"
-                >
-                    <Image src={photo.original} width={600} height={600} fit="cover" alt={photo.title} />
-                </a>
-                <!-- read by the PhotoSwipe caption plugin -->
-                <div class="pswp-caption-content" hidden>
-                    <strong>{photo.title}</strong>
-                    {photo.description && <p>{photo.description}</p>}
-                    <p>{[photo.dateText, photo.location].filter(Boolean).join(', ')}</p>
-                    {(photo.camera || photo.lens || photo.exposure) && (
-                        <p>{[photo.camera, photo.lens, photo.exposure].filter(Boolean).join(', ')}</p>
-                    )}
-                    <p>
-                        © {photo.author},
-                        {photo.licenseUrl
-                            ? <a href={photo.licenseUrl}>{photo.license}</a>
-                            : 'all rights reserved'}
-                    </p>
-                </div>
-            </figure>
+        {album.photos.map((photo) => (
+            <GalleryPhoto photo={photo} />
         ))}
     </div>
 </BaseLayout>
@@ -77,15 +51,5 @@ const photos = await Promise.all(album.photos.map(async (photo) => (
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
         gap: 0.5rem;
-    }
-
-    #gallery figure {
-        margin: 0;
-    }
-
-    #gallery img {
-        display: block;
-        width: 100%;
-        height: auto;
     }
 </style>

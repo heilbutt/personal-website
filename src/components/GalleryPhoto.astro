@@ -1,0 +1,53 @@
+---
+// One photo within a gallery album.
+
+import { Image } from 'astro:assets';
+import { getPhotoSwipeImage, type GalleryPhoto } from '../lib/gallery';
+
+interface Props {
+    photo: GalleryPhoto
+}
+const { photo } = Astro.props;
+
+// Get the lightbox information only here, because r
+// running it from lib/gallery.ts hangs the build process
+const lightbox = await getPhotoSwipeImage(photo);
+---
+
+<figure>
+    <a
+        href={lightbox.src}
+        data-pswp-width={lightbox.width}
+        data-pswp-height={lightbox.height}
+        target="_blank"
+    >
+        <Image src={photo.original} width={300} height={300} fit="cover" alt={photo.title} />
+    </a>
+    <!-- read by the PhotoSwipe caption plugin -->
+    <div class="pswp-caption-content" hidden>
+        <strong>{photo.title}</strong>
+        {photo.description && <p>{photo.description}</p>}
+        <p>{[photo.dateText, photo.location].filter(Boolean).join(', ')}</p>
+        {(photo.camera || photo.lens || photo.exposureText) && (
+            <p>{[photo.camera, photo.lens, photo.exposureText].filter(Boolean).join(', ')}</p>
+        )}
+        <p>
+            © {photo.author},
+            {photo.licenseUrl
+                ? <a href={photo.licenseUrl}>{photo.license}</a>
+                : 'all rights reserved'}
+        </p>
+    </div>
+</figure>
+
+<style>
+    figure {
+        margin: 0;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+</style>

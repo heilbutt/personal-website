@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "gallery:scaffold": "node scripts/gallery-scaffold.ts"
+    "gallery:scaffold": "node scripts/galleryScaffold.ts"
   },
   "keywords": [],
   "author": "",

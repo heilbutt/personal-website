@@ -112,10 +112,12 @@ export const publicationsFromZotero = defineCollection({
 // Photo gallery
 // =============================================================================
 
-// Each image media/originals/<album>/<photo>.<ext> (gitignored)
-// is paired by path with src/content/gallery/<album>/<photo>.yaml (committed).
-// Each album also needs a <album>/_album.yaml.
-// See lib/gallery.ts.
+// Each image <ORIGINALS_DIR>/<album>/<photo>.<ext> is paired by path with
+// <CONTENT_DIR>/<album>/<photo>.yaml. Each album also needs a <album>/_album.yaml.
+// Paths: gallery.config.ts. Pairing and checks: lib/gallery.ts.
+
+// YAML files (in repo): src/content/gallery/<album>/<photo>.yaml and <album>/_album.yaml
+const CONTENT_DIR = 'src/content/gallery';
 
 // Allowed photo licenses with the URL of their legal text
 export const LICENSE_URLS = {
@@ -139,7 +141,10 @@ const photoSchema = z.object({
     'location': z.string().optional(), // free text, never GPS coordinates
     'camera': z.string().optional(),
     'lens': z.string().optional(),
-    'exposure': z.string().optional(), // e.g. "1/250 s, f/8, ISO 100, 35 mm"
+    'focalLength': z.number().optional(),
+    'exposureTime': z.number().optional(),
+    'fNumber': z.number().optional(),
+    'iso': z.number().int().optional(),
     'draft': z.boolean().default(false) // if true, hides the photo
 });
 
@@ -151,20 +156,20 @@ const albumSchema = z.object({
     'draft': z.boolean().default(false) // if true, hides the album
 });
 
-// Photos: src/content/gallery/<album>/<photo>.yaml, id "<album>/<photo>"
+// Photos: <CONTENT_DIR>/<album>/<photo>.yaml, id "<album>/<photo>"
 export const galleryPhotos = defineCollection({
     loader: glob({
-        base: './src/content/gallery',
+        base: `./${CONTENT_DIR}`,
         pattern: ['**/*.yaml', '!**/_album.yaml'],
         generateId: ({ entry }) => entry.replace(/\.yaml$/, ''),
     }),
     schema: photoSchema
 });
 
-// Albums: src/content/gallery/<album>/_album.yaml, id "<album>"
+// Albums: <CONTENT_DIR>/<album>/_album.yaml, id "<album>"
 export const galleryAlbums = defineCollection({
     loader: glob({
-        base: './src/content/gallery',
+        base: `./${CONTENT_DIR}`,
         pattern: '**/_album.yaml',
         generateId: ({ entry }) => entry.replace(/\/_album\.yaml$/, ''),
     }),

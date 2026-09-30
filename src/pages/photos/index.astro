@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { galleryAlbums } from '../../lib/gallery';
+import { albums } from '../../lib/gallery';
 
 const metadata = {
     title: 'Photo gallery'
@@ -14,7 +14,7 @@ const metadata = {
     </header>
 
     <ul class="albums">
-        {galleryAlbums.map((album) => (
+        {albums.map((album) => (
             <li>
                 <a href={`/photos/${album.slug}/`}>
                     <Image src={album.cover.original} width={600} height={600} fit="cover" alt={album.cover.title} />
